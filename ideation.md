@@ -1,8 +1,14 @@
-**Problem Statement** 
+# Chrome Extension Idea: Video Insight
+
+## Authors
+
+John Guirguis, Jake Brooks, Aditya Maddipatla, Ashwin Balaji, & Zain Khan
+
+## Problem Statement
 
 Many students struggle with understanding the corpus of research we’re provided to read through due to the building nature of STEM fields. As such, it’s impossible to succeed in understanding later areas of work without first grasping prior research (often this research is the product of concepts taught in fragments throughout multiple different courses in undergrad). One of the key pain points we aim to address with this product would be the need to look into and search up terms or concepts that you encounter as you read new material if you haven’t seen it before. Another would be struggling with dense wordy explanations of ideas that could be tailored for a more visual audience. Many of our users would likely be international students with multi-lingual backgrounds, and it might help them to have concepts re-explained in a language they’re more familiar with. Finally, we would hope to address recurring or important explanations (potentially for harder or more useful concepts) with bookmark abilities 
 
-**Target Audience** 
+## Target Audience 
 
 - Students who would like further elaboration or explanation of concepts that are either new or challenging for them, and which would benefit from added context
 
@@ -14,7 +20,7 @@ Many students struggle with understanding the corpus of research we’re provide
 
 - Educators who are looking for ways to make their material more engaging or visual for students
 
-**Description**
+## Description
 
 Introducing our Chrome plugin, Video Insights! Have you ever come across a word, sentence, or paragraph while browsing the web and wished you had a quick way to dive deeper into its meaning or context? Video Insights is here to enhance your online learning and exploration experience by seamlessly integrating with YouTube to provide you with a curated list of educational videos related to the content you highlight.
 
@@ -24,7 +30,7 @@ Whether you're researching a complex topic, studying for an exam, or simply curi
 
 ********
 
-**Selling Points (Value-Add Prop)/Features**
+## Selling Points (Value-Add Prop)/Features
 
 - **Seamless Integration:** Access **Video Insights** directly from your browser's context menu for quick and convenient searches
 
@@ -36,7 +42,7 @@ Whether you're researching a complex topic, studying for an exam, or simply curi
 
 - **Personalized Learning:** Discover new insights, explanations, and perspectives related to the content you're exploring online, with the added benefit of filters on your search results/query to customize your learning experience.
 
-**User Stories:**
+## User Stories:
 
 1. A college student is reading an article related to one of their courses. They use the extension and find the most relevant recommended videos which help add some additional context behind the article. 
 
