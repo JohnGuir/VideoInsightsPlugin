@@ -73,3 +73,52 @@ Whether you're researching a complex topic, studying for an exam, or simply curi
 14. A basketball player is reading the play book/ or some sort of online manual and is trying to understand the various sets. They use the extension to find examples of these sets in actual basketball games. This helps them visualize the sets/plays in action. 
 
 15. A parent is helping their child with homework, they use a Chrome extension to identify challenging concepts in their assignments to suggest age-appropriate YouTube videos that explain these concepts in an engaging manner.
+
+# Technical Details
+
+## User Interface
+
+We intend to have a pop-up that captures the highlighted text that you want to query as well as different search parameters for the query such as ranking criteria and language results. After said query request the side bar will contain two tabs, one with a list of videos returned by the API ranked by relevance to query criteria with the option to bookmark specific videos. The second tab will contain a history of previously bookmarked videos for easy access in the future. Figma version of the UI to be posted within the week. 
+API, Libraries, and Frameworks
+Youtube API - We will use this to search and retrieve Youtube videos based on some query parameters
+React - We will use this library to build our frontend application–it will be especially useful for creating windows and sidebars. 
+Chrome Storage API - Used to stored bookmarked queries and video URLs.
+Data Storage
+We would need to store the user, their prior queries, and the videos they bookmarked. 
+We can do this with a mapping of a user (taken from chrome extension directly) to their search queries and their video urls. These will be stored in chrome.storage on the user’s browser.
+
+## Project Management
+
+Collaboration and Task Allocation
+[Select a Leader, who will make final decisions on the vision of the project; and a Manager, who will oversee the project management and ensure all team members have everything they need to contribute effectively. List the remaining team members and their roles.]
+Leader: John
+Manager: Aditya
+Remaining Team Members: Jake, Zain, Ashwin
+[Provide a brief overview of what each team member will work on. How will you collaborate on this project? What tools or platforms will you use to communicate and share code?]
+
+We will primarily use Slack to communicate with each other. We will use the Github repository to consolidate our code in one place.
+John: Figma and helping with React 
+Aditya: Chrome storage and help with React design.
+Jake: React frontend design and integration of YouTube API.
+Zain: Youtube API integration and developing backend
+Ashwin: Implementing sidebar in React, filtering 
+
+
+## Risks and Mitigation
+
+[Identify potential risks that could affect the development of your Chrome Extension. How will you mitigate these risks? What is your contingency plan if things don't go as expected?]
+API Limitations: The YouTube API has rate limits that could restrict the number of searches we can perform. We will mitigate this by caching search results and optimizing our search queries.
+Data storage: We need to figure out how to store user data without a costly back-end through the chrome storage API. Furthermore, we need to ensure that we are following proper security protocols both when writing and reading data as well when using an api key to make calls.
+Technical Challenges: Developing a Chrome extension with seamless integration and a smooth user experience may present technical challenges. We will conduct thorough testing and be prepared to adapt our approach as needed.
+
+
+## Milestones and Timeline
+
+Week 1: Test API calls, build Figma for UI
+Week 2: Build Skeleton Code for frontend structure, implement basic (unfiltered) API calls
+Skeleton code = grab highlighted words, show side panel, search bar pop-up
+Basic storing of data in Chrome storage. 
+Week 3: Add SideBar to Frontend and Filters in sidebar. Add user set-up
+Week 4: Play Video in sidebar and filter search. Add extra filters/dynamic number of filters that user might want to query on.
+
+
