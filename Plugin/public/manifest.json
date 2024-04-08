@@ -1,14 +1,14 @@
 {
     "manifest_version": 3,
-    "name": "Snippet Saver",
+    "name": "Video Insights Plugin",
     "version": "1.0",
-    "description": "Save snippets of text from web pages",
+    "description": "Highlight any text on a webpage, right-click, and select the \"Search Videos\" option from the context menu. Our plugin instantly analyzes the selected text and uses a sophisticated sorting algorithm to search YouTube for the most relevant and informative videos available.",
     "icons": {
       "16": "images/favicon-16x16.png",
       "32": "images/favicon-32x32.png",
-      "180": "images/apple-touch-icon.png",
-      "192": "images/android-chrome-192x192.png",
-      "512": "images/android-chrome-512x512.png"
+      "180": "images/logo-180x180.png",
+      "192": "images/logo-192x192.png",
+      "512": "images/logo-512x512.png"
     },
     "offline_enabled": true,
     "permissions": ["storage", "activeTab", "contextMenus"],
