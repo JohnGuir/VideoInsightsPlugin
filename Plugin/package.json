@@ -8,6 +8,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "copy-webpack-plugin": "^11.0.0",
+    "keyword-extractor": "^0.0.28",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.4",

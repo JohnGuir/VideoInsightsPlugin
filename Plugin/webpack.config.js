@@ -3,12 +3,15 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require("path");
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: {
+        main: "./src/index.tsx",
+        background: "./public/background.js" // Added this line to include background.js
+    },
     mode: "production",
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
+                test: /\.(ts|tsx|js)$/, // Including .js in the test regex
                 use: 'babel-loader',
                 exclude: /node_modules/,
             },
@@ -24,7 +27,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "bundle.js",
+        filename: "[name].bundle.js", // Using [name] to output multiple bundles
     },
     plugins: [
         /* Necessary to use HTMLPlugin to inject the bundle into the index.html */
