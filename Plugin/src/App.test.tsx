@@ -12,97 +12,97 @@ describe('App', () => {
     chrome.flush();
   });
 
-  it('renders Snippet Collector header', async () => {
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: [] });
+  it('renders VideoInsights header', async () => {
+    chrome.storage.local.get.withArgs('queries').yields({ queries: [] });
 
     render(<App />);
-    const headerElement = await screen.findByText(/Snippet Collector/i);
+    const headerElement = await screen.findByText(/VideoInsights/i);
     expect(headerElement).toBeInTheDocument();
 
-    expect(chrome.storage.local.get).toHaveBeenCalledWith('snippets');
+    expect(chrome.storage.local.get).toHaveBeenCalledWith('queries');
   });
 
-  it('renders sample snippet when snippets are undefined in chrome storage', async () => {
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: undefined });
+  it('renders sample query when queries are undefined in chrome storage', async () => {
+    chrome.storage.local.get.withArgs('queries').yields({ queries: undefined });
 
     render(<App />);
-    const snippetElements = await screen.findAllByRole('listitem');
-    expect(snippetElements).toHaveLength(1);
-    expect(snippetElements[0]).toHaveTextContent('Sample snippet');
+    const queryElements = await screen.findAllByRole('listitem');
+    expect(queryElements).toHaveLength(1);
+    expect(queryElements[0]).toHaveTextContent('Sample query');
   });
 
-  it('renders snippets from chrome storage', async () => {
-    const mockSnippets = [
-      { id: 1, text: 'Snippet 1' },
-      { id: 2, text: 'Snippet 2' },
+  it('renders queries from chrome storage', async () => {
+    const mockQueries = [
+      { id: 1, text: 'Query 1' },
+      { id: 2, text: 'Query 2' },
     ];
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: mockSnippets });
+    chrome.storage.local.get.withArgs('queries').yields({ queries: mockQueries });
 
     render(<App />);
-    const snippetElements = await screen.findAllByRole('listitem');
-    expect(snippetElements).toHaveLength(2);
-    expect(snippetElements[0]).toHaveTextContent('Snippet 1');
-    expect(snippetElements[1]).toHaveTextContent('Snippet 2');
+    const queryElements = await screen.findAllByRole('listitem');
+    expect(queryElements).toHaveLength(2);
+    expect(queryElements[0]).toHaveTextContent('Query 1');
+    expect(queryElements[1]).toHaveTextContent('Query 2');
   });
 
-  it('updates snippet in chrome storage when edited', async () => {
-    const mockSnippets = [
-      { id: 1, text: 'Sample snippet' },
-      { id: 2, text: 'Snippet 2' },
+  it('updates query in chrome storage when edited', async () => {
+    const mockQueries = [
+      { id: 1, text: 'Sample query' },
+      { id: 2, text: 'Query 2' },
     ];
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: mockSnippets });
+    chrome.storage.local.get.withArgs('queries').yields({ queries: mockQueries });
 
     render(<App />);
-    const editButtons = await screen.findAllByText('Edit');
+    const editButtons = await screen.findAllByText('Rename');
     expect(editButtons).toHaveLength(2);
     const editButton = editButtons[0];
     fireEvent.click(editButton);
 
-    const textArea = await screen.findByDisplayValue('Sample snippet');
-    fireEvent.change(textArea, { target: { value: 'Updated snippet' } });
+    const textArea = await screen.findByDisplayValue('Sample query');
+    fireEvent.change(textArea, { target: { value: 'Updated query' } });
 
     const saveButton = await screen.findByText('Save');
     fireEvent.click(saveButton);
 
     expect(chrome.storage.local.set).toHaveBeenCalledWith({
-      snippets: [{ id: 1, text: 'Updated snippet' }, { id: 2, text: 'Snippet 2' }],
+      queries: [{ id: 1, text: 'Updated query' }, { id: 2, text: 'Query 2' }],
     });
   });
 
-  it('removes snippet from chrome storage when deleted', async () => {
-    const mockSnippets = [{ id: 1, text: 'Snippet to delete' }];
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: mockSnippets });
+  it('removes query from chrome storage when deleted', async () => {
+    const mockQueries = [{ id: 1, text: 'Query to delete' }];
+    chrome.storage.local.get.withArgs('queries').yields({ queries: mockQueries });
 
     render(<App />);
     const deleteButton = await screen.findByText('Delete');
     fireEvent.click(deleteButton);
 
-    expect(chrome.storage.local.set).toHaveBeenCalledWith({ snippets: [] });
+    expect(chrome.storage.local.set).toHaveBeenCalledWith({ queries: [] });
   });
 
-  it('sets initial state with sample snippet when local storage is empty', async () => {
-    chrome.storage.local.get.withArgs('snippets').yields({});
+  it('sets initial state with sample query when local storage is empty', async () => {
+    chrome.storage.local.get.withArgs('queries').yields({});
 
     render(<App />);
-    const snippetElements = await screen.findAllByRole('listitem');
-    expect(snippetElements).toHaveLength(1);
-    expect(snippetElements[0]).toHaveTextContent('Sample snippet');
+    const queryElements = await screen.findAllByRole('listitem');
+    expect(queryElements).toHaveLength(1);
+    expect(queryElements[0]).toHaveTextContent('Sample query');
   });
 
-  it('sets initial state with empty array when snippets key is an empty array in local storage', async () => {
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: [] });
+  it('sets initial state with empty array when queries key is an empty array in local storage', async () => {
+    chrome.storage.local.get.withArgs('queries').yields({ queries: [] });
 
     render(<App />);
-    const snippetElements = screen.queryAllByRole('listitem');
-    expect(snippetElements).toHaveLength(0);
+    const queryElements = screen.queryAllByRole('listitem');
+    expect(queryElements).toHaveLength(0);
   });
 
-  /*it('handles edited snippet with no changes', async () => {
-    const mockSnippets = [{ id: 1, text: 'Sample snippet' }];
-    chrome.storage.local.get.withArgs('snippets').yields({ snippets: mockSnippets });
+  /*it('handles edited query with no changes', async () => {
+    const mockQueries = [{ id: 1, text: 'Sample query' }];
+    chrome.storage.local.get.withArgs('queries').yields({ queries: mockQueries });
 
     render(<App />);
-    const editButton = await screen.findByText('Edit');
+    const editButton = await screen.findByText('Rename');
     fireEvent.click(editButton);
 
     const saveButton = await screen.findByText('Save');

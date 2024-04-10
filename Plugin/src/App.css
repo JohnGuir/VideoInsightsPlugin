@@ -9,17 +9,17 @@
     background-color: white;
   }
   
-  .snippet-list {
+  .query-list {
     list-style-type: none;
     padding: 0;
   }
   
-  .snippet-item {
+  .query-item {
     margin-bottom: 1rem;
     padding: 0.5rem;
     border: 1px solid #ccc;
   }
   
-  .snippet-item button {
+  .query-item button {
     margin-left: 0.5rem;
   }

@@ -1,22 +1,22 @@
-# Snippet Saver Chrome Extension (React, TypeScript, Webpack)
+# Query Saver Chrome Extension (React, TypeScript, Webpack)
 
 This project demonstrates how to build a Chrome extension using [React](https://react.dev/) with TypeScript and Webpack. It showcases key features such as interacting with Chrome APIs ([storage](https://developer.chrome.com/docs/extensions/reference/api/storage), [contextMenus](https://developer.chrome.com/docs/extensions/reference/api/contextMenus)), testing with [Jest](https://jestjs.io/) and [Sinon](https://sinonjs.org/), and structuring a React app with separation of concerns.
 
 ## Features
 
-- Capture snippets of text from web pages using a [**context menu**](https://developer.chrome.com/docs/extensions/reference/api/contextMenus)
-- View, edit, and delete saved snippets in a [**popup window**](https://developer.chrome.com/docs/extensions/reference/api/action#show_a_popup) triggered by an [**action button**](https://developer.chrome.com/docs/extensions/reference/api/action)
-- Persist snippets using [Chrome's storage API](https://developer.chrome.com/docs/extensions/reference/api/storage)
+- Capture queries of text from web pages using a [**context menu**](https://developer.chrome.com/docs/extensions/reference/api/contextMenus)
+- View, edit, and delete saved queries in a [**popup window**](https://developer.chrome.com/docs/extensions/reference/api/action#show_a_popup) triggered by an [**action button**](https://developer.chrome.com/docs/extensions/reference/api/action)
+- Persist queries using [Chrome's storage API](https://developer.chrome.com/docs/extensions/reference/api/storage)
 - Interact with the extension using content scripts and background scripts
 - Comprehensive testing setup using [Jest](https://jestjs.io/), [Sinon](https://sinonjs.org/), and [sinon-chrome](https://github.com/acvetkov/sinon-chrome/) for mocking Chrome API
 
 ## Screenshots
 
-The first screenshot showcases the **popup window** with saved snippets and the **action button** (SC in the top-right corner):
+The first screenshot showcases the **popup window** with saved queries and the **action button** (SC in the top-right corner):
 
-![Screenshot showcases the **popup window** with saved snippets and the **action button** (SC in the top-right corner)](./screenshot-action-button-and-popup.png)
+![Screenshot showcases the **popup window** with saved queries and the **action button** (SC in the top-right corner)](./screenshot-action-button-and-popup.png)
 
-The second screenshot shows the **context menu** that appears when you right-click on a web page to capture a snippet (this context menu is registered and its events are handled in the `background.js` script):
+The second screenshot shows the **context menu** that appears when you right-click on a web page to capture a query (this context menu is registered and its events are handled in the `background.js` script):
 
 ![Screenshot of the context menu](./screenshot-context-menu.png)
 
@@ -59,9 +59,9 @@ The second screenshot shows the **context menu** that appears when you right-cli
 
 ## Usage
 
-- Right-click on a web page and select "Capture Snippet" from the context menu to save the selected text as a snippet
+- Right-click on a web page and select "Capture Query" from the context menu to save the selected text as a query
 - Click on the extension icon to open the popup window
-- In the popup, you can view, edit, and delete saved snippets
+- In the popup, you can view, edit, and delete saved queries
 
 ## Development
 
@@ -99,14 +99,14 @@ Key aspects of the Manifest V3 configuration include:
 
 The project follows a modular architecture with separation of concerns:
 
-- `App`: The main component that manages the state and renders the `SnippetList`
-- `SnippetList`: Renders a list of `SnippetItem` components based on the saved snippets
-- `SnippetItem`: Represents an individual snippet with options to edit and delete
+- `App`: The main component that manages the state and renders the `QueryList`
+- `QueryList`: Renders a list of `QueryItem` components based on the saved queries
+- `QueryItem`: Represents an individual query with options to edit and delete
 
 The communication between the extension's scripts is handled as follows:
 
 - `contentScript.js`: Injected into web pages, captures selected text and sends a message to the background script
-- `background.js`: Listens for messages from the content script, saves snippets to storage, and manages the context menu
+- `background.js`: Listens for messages from the content script, saves queries to storage, and manages the context menu
 
 ## Testing
 
@@ -136,16 +136,16 @@ One of the key aspects of testing a Chrome extension is mocking the Chrome APIs.
 Here's an example test that demonstrates mocking the Chrome storage API:
 
 ```typescript
-it('sets initial state with empty array when snippets key is an empty array in local storage', async () => {
-  chrome.storage.local.get.withArgs('snippets').yields({ snippets: [] });
+it('sets initial state with empty array when queries key is an empty array in local storage', async () => {
+  chrome.storage.local.get.withArgs('queries').yields({ queries: [] });
 
   render(<App />);
-  const snippetElements = screen.queryAllByRole('listitem');
-  expect(snippetElements).toHaveLength(0);
+  const queryElements = screen.queryAllByRole('listitem');
+  expect(queryElements).toHaveLength(0);
 });
 ```
 
-In this test, we mock the `chrome.storage.local.get` method to return an empty array for the 'snippets' key. This allows us to test how the `App` component behaves when there are no saved snippets.
+In this test, we mock the `chrome.storage.local.get` method to return an empty array for the 'queries' key. This allows us to test how the `App` component behaves when there are no saved queries.
 
 ## Duplicating Project: Using This Project As A Starting Point
 
@@ -157,12 +157,12 @@ Here are a few ideas to enhance the functionality of this Chrome extension:
 
 - Support rich formatting
 - Implement syntax highlighting when selecting code
-- Make it easy to copy a snippet to clipboard
-- Add tags or categories to snippets for better organization
-- Implement search functionality to filter snippets
-- Allow users to export and import snippets as JSON files
+- Make it easy to copy a query to clipboard
+- Add tags or categories to queries for better organization
+- Implement search functionality to filter queries
+- Allow users to export and import queries as JSON files
 - Integrate with a note-taking service or a cloud storage provider
-- Add a feature to share snippets with others
+- Add a feature to share queries with others
 
 ## Credits
 
