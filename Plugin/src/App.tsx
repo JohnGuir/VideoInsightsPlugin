@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Query, QueryList } from "./components/QueryList";
 import { error } from "console";
+import * as he from "he";
 
 // Define a sample query for initial state when local storage is empty
 const sample_query: Query = { id: 1, text: "Sample query", videos: [] };
@@ -68,7 +69,7 @@ function App() {
         // Extract video IDs and titles from the search results
         temp_videos = data.items.map((item: any) => ({
           id: item.id.videoId,
-          title: item.snippet.title,
+          title: he.decode(item.snippet.title),
         }));
         console.log("Top videos:", temp_videos);
         setSelectedVideos(temp_videos); // Set the selected videos
