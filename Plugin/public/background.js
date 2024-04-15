@@ -33,7 +33,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const keywords = topKeywords.join(' ');
 
     // Use the YouTube Data API to fetch the top video results for the processed query
-    const youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(keywords)}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
+    const youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&type=video&q=${encodeURIComponent(keywords)}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
 
     fetch(youtubeSearchUrl)
       .then((response) => response.json())
@@ -56,8 +56,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
           queries.push(newQuery);
           chrome.storage.local.set({ queries });
         });
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.error('Error fetching YouTube search results:', error);
       });
   }

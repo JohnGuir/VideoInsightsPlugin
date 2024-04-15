@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import { Query, QueryList } from './components/QueryList';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import { Query, QueryList } from "./components/QueryList";
+import { error } from "console";
 
 // Define a sample query for initial state when local storage is empty
-const sample_query: Query = { id: 1, text: 'Sample query', videos: []};
+const sample_query: Query = { id: 1, text: "Sample query", videos: [] };
 
 function App() {
   // Define the state variable for storing the list of queries
   const [queries, setQueries] = useState<Query[]>([]);
   const [showResults, setShowResults] = useState(false); // State to control view
-  const [selectedVideos, setSelectedVideos] = useState<{ id: string; title: string }[]>([]);
-  const [selectedQueryText, setSelectedQueryText] = useState(''); // State to store the selected query text
-
-
-
+  const [selectedVideos, setSelectedVideos] = useState<
+    { id: string; title: string }[]
+  >([]);
+  const [selectedQueryText, setSelectedQueryText] = useState(""); // State to store the selected query text
 
   // Use useEffect to load queries from local storage when the component mounts
   useEffect(() => {
-    chrome.storage.local.get('queries', (result) => {
+    chrome.storage.local.get("queries", (result) => {
       if (result.queries === undefined) {
         // If 'queries' key doesn't exist in local storage, set the initial state with the sample query
         setQueries([sample_query]);
@@ -51,18 +51,42 @@ function App() {
   };
 
   // Handler for viewing the results of a query
-  const handleViewResults = (queryText: string, videos: { id: string; title: string }[]) => {
+  const handleViewResults = (
+    queryText: string
+    // videos: { id: string; title: string }[]
+  ) => {
     setSelectedQueryText(queryText); // Set the selected query text
-    setSelectedVideos(videos); // Set the selected videos
+    const youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&type=video&q=${encodeURIComponent(
+      queryText
+    )}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
+    console.log(youtubeSearchUrl);
+    var temp_videos: { id: string; title: string }[] = [];
+    fetch(youtubeSearchUrl)
+      .then((response) => response.json())
+      .then((data: any) => {
+        console.log(data);
+        // Extract video IDs and titles from the search results
+        temp_videos = data.items.map((item: any) => ({
+          id: item.id.videoId,
+          title: item.snippet.title,
+        }));
+        console.log("Top videos:", temp_videos);
+        setSelectedVideos(temp_videos); // Set the selected videos
+      })
+      .catch((error) => {
+        console.error("Error fetching YouTube search results:", error);
+      });
+
     setShowResults(true); // Function to toggle results view
   };
-  
+
   return (
     <div className="App">
       <h1>VideoInsights</h1>
       {showResults ? (
         <div>
-          <h2>Results for: "{selectedQueryText}"</h2> {/* Display the selected query text */}
+          <h2>Results for: "{selectedQueryText}"</h2>{" "}
+          {/* Display the selected query text */}
           <ol className="video-results-list">
             {selectedVideos.map((video) => (
               <li key={video.id}>
@@ -86,7 +110,7 @@ function App() {
           queries={queries}
           onRenameQuery={handleRenameQuery}
           onDeleteQuery={handleDeleteQuery}
-          onViewResults={(queryText, videos) => handleViewResults(queryText, videos)} // Pass the query text to handleViewResults
+          onViewResults={(queryText) => handleViewResults(queryText)} // Pass the query text to handleViewResults
         />
       )}
     </div>
