@@ -16,7 +16,6 @@
       "service_worker": "background.bundle.js"
     },
     "action": {
-      "default_popup": "index.html"
     },
     "content_scripts": [
       {
@@ -24,5 +23,5 @@
         "js": ["contentScript.js"]
       }
     ],
-    "side_panel": {"default_path": "sidepanel.html"}
+    "side_panel": {"default_path": "/index.html"}
   }

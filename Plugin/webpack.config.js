@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = {
     entry: {
         main: "./src/index.tsx",
-        background: "./public/background.js" // Added this line to include background.js
+        background: "./public/background.js", // Added this line to include background.js
     },
     mode: "production",
     module: {
