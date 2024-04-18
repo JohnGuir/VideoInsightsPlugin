@@ -50,18 +50,31 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         }));
         console.log('Top videos:', videos);
 
-        // Save the query and associated videos to Chrome's storage
-        chrome.storage.local.get({ queries: [] }, (result) => {
-          const queries = result.queries;
-          const newQuery = {
-            id: Date.now(),
-            text: query,
-            videos: videos, // Save the videos with IDs and titles
-          };
-          queries.push(newQuery);
-          chrome.storage.local.set({ queries });
-        });
-      }).catch((error) => {
+        // Send the result to the frontend
+        const queryResult = {
+          id: Date.now(),
+          text: query,
+          videos: videos,
+        }
+        chrome.storage.local.set({"queryResult":[queryResult]})
+        //Store the current website URL
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+          let url = tabs[0].url;
+          chrome.storage.local.set({"websiteURL":url});
+
+      });
+        // chrome.storage.local.get({ queries: [] }, (result) => {
+        //   const queries = result.queries;
+        //   const newQuery = {
+        //     id: Date.now(),
+        //     text: query,
+        //     videos: videos, // Save the videos with IDs and titles
+        //   };
+        //   queries.push(newQuery);
+        //   chrome.storage.local.set({ queries });
+        // });
+      })
+      .catch((error) => {
         console.error('Error fetching YouTube search results:', error);
       });
   }

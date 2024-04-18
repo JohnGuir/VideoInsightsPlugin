@@ -23,3 +23,20 @@
   .query-item button {
     margin-left: 0.5rem;
   }
+  .bookmark-button {
+    background-color: #4caf50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .bookmark-button:hover {
+    background-color: #45a049; /* Darker Green */
+  }
