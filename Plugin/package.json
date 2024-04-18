@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^13.5.0",
+    "@types/he": "^1.2.3",
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "copy-webpack-plugin": "^11.0.0",
+    "he": "^1.2.0",
     "keyword-extractor": "^0.0.28",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

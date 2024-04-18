@@ -11,12 +11,17 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+// chrome.action.onClicked.addListener((tab) => {
+//   chrome.sidePanel.open({windowId: tab.windowId});
+// })
+
 // This function is called when a context menu item is clicked
 // See: https://developer.chrome.com/docs/extensions/reference/api/contextMenus#event-onClicked
 // This function is called when a context menu item is clicked
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'searchVideos') {
     const query = info.selectionText;
+    chrome.sidePanel.open({windowId: tab.windowId});
 
     // Extract keywords from the highlighted text
     const extractionResult = keywordExtractor.extract(query, {
@@ -33,7 +38,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const keywords = topKeywords.join(' ');
 
     // Use the YouTube Data API to fetch the top video results for the processed query
-    const youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(keywords)}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
+    const youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&type=video&q=${encodeURIComponent(keywords)}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
 
     fetch(youtubeSearchUrl)
       .then((response) => response.json())

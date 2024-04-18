@@ -11,17 +11,14 @@
       "512": "images/logo-512x512.png"
     },
     "offline_enabled": true,
-    "permissions": ["storage", "activeTab", "contextMenus", "tabs"],
+    "permissions": ["storage", "activeTab", "contextMenus", "sidePanel", "tabs"],
     "background": {
       "service_worker": "background.bundle.js"
     },
     "action": {
-      "default_popup": "index.html"
+      "default_popup": "popup.html"
     },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["contentScript.js"]
-      }
-    ]
+    "side_panel": {
+      "default_path": "/sidebar.html"
+    }
   }
