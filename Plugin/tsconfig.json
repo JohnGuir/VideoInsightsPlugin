@@ -22,6 +22,9 @@
     "typeRoots": ["./src/globals.d.ts", "./node_modules/@types"]
   },
   "include": [
-    "src"
-, "public/background.js", "public/contentScript.js", "src/sidepanel.tsx"  ]
+    "src",
+    "src/contentScript.js",
+    "src/sidebar/sidepanel.tsx",
+    "src/background.js" // Add the missing file here
+  ]
 }

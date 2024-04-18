@@ -4,8 +4,8 @@ const path = require("path");
 
 module.exports = {
     entry: {
-        main: "./src/index.tsx",
-        background: "./public/background.js", // Added this line to include background.js
+        main: "./src/sidebar/sidebar.tsx",
+        background: "./src/background.js", // Added this line to include background.js
     },
     mode: "production",
     module: {
@@ -30,9 +30,11 @@ module.exports = {
         filename: "[name].bundle.js", // Using [name] to output multiple bundles
     },
     plugins: [
-        /* Necessary to use HTMLPlugin to inject the bundle into the index.html */
+        /* Necessary to use HTMLPlugin to inject the bundle into the sidebar.html */
         new HTMLPlugin({
-            template: "./public/index.html",
+            title: "Sidebar",
+            filename: "sidebar.html",
+            template: "./public/sidebar.html",
         }),
         new CopyWebpackPlugin({
             patterns: [
@@ -40,7 +42,7 @@ module.exports = {
                     from: "public", 
                     to: "", 
                     globOptions: {
-                        ignore: ["**/index.html"], // This line excludes index.html
+                        ignore: ["**/sidebar.html"], // This line excludes any file ending in .html in the public folder
                     },
                 },
             ],
