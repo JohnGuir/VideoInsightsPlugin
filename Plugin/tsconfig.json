@@ -25,6 +25,7 @@
     "src",
     "src/contentScript.js",
     "src/ui_components/sidepanel.tsx",
+    "src/ui_components/popup.tsx",
     "src/background.js" // Add the missing file here
   ]
 }

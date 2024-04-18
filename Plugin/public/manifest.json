@@ -16,6 +16,7 @@
       "service_worker": "background.bundle.js"
     },
     "action": {
+      "default_popup": "popup.html"
     },
     "side_panel": {
       "default_path": "/sidebar.html"

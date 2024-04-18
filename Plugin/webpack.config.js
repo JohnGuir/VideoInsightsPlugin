@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         sidebar: "./src/ui_components/sidebar.tsx",
         background: "./src/background.js", // Added this line to include background.js
+        popup: "./src/ui_components/popup.tsx", // Added this line to include popup.tsx
     },
     mode: "production",
     module: {
@@ -37,13 +38,21 @@ module.exports = {
             template: "./public/sidebar.html",
             chunks: ["sidebar"],
         }),
+        /* Necessary to use HTMLPlugin to inject the bundle into the popup.html */
+        new HTMLPlugin({
+            title: "Popup",
+            filename: "popup.html",
+            template: "./public/popup.html",
+            chunks: ["popup"],
+        }),
         new CopyWebpackPlugin({
             patterns: [
                 { 
                     from: "public", 
                     to: "", 
                     globOptions: {
-                        ignore: ["**/sidebar.html"], // This line excludes any file ending in .html in the public folder
+                        ignore: ["**/sidebar.html","**/popup.html"], 
+                        // This line excludes any file ending in .html in the public folder
                     },
                 },
             ],

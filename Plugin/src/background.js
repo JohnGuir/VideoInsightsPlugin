@@ -11,9 +11,9 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.action.onClicked.addListener((tab) => {
-  chrome.sidePanel.open({windowId: tab.windowId});
-})
+// chrome.action.onClicked.addListener((tab) => {
+//   chrome.sidePanel.open({windowId: tab.windowId});
+// })
 
 // This function is called when a context menu item is clicked
 // See: https://developer.chrome.com/docs/extensions/reference/api/contextMenus#event-onClicked
