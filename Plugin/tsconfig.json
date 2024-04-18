@@ -24,7 +24,7 @@
   "include": [
     "src",
     "src/contentScript.js",
-    "src/sidebar/sidepanel.tsx",
+    "src/ui_components/sidepanel.tsx",
     "src/background.js" // Add the missing file here
   ]
 }

@@ -4,7 +4,7 @@ const path = require("path");
 
 module.exports = {
     entry: {
-        main: "./src/sidebar/sidebar.tsx",
+        sidebar: "./src/ui_components/sidebar.tsx",
         background: "./src/background.js", // Added this line to include background.js
     },
     mode: "production",
@@ -35,6 +35,7 @@ module.exports = {
             title: "Sidebar",
             filename: "sidebar.html",
             template: "./public/sidebar.html",
+            chunks: ["sidebar"],
         }),
         new CopyWebpackPlugin({
             patterns: [
