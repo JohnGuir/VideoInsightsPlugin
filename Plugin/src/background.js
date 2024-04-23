@@ -21,6 +21,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'searchVideos') {
     const query = info.selectionText;
+    chrome.storage.local.set({"search_text": info.selectionText});
     chrome.sidePanel.open({windowId: tab.windowId});
 
     // Extract keywords from the highlighted text
