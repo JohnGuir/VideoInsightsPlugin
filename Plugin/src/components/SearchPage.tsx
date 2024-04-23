@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Query, QueryList } from "./QueryList";
+import "../App.css";
 import { error } from "console";
 import * as he from "he";
 
@@ -123,11 +124,32 @@ function SearchPage() {
 
   return (
     <div className="App">
-      <h1>VideoInsights</h1>
+      <h1
+        style={{
+          marginTop: "20px",
+        }}
+      >
+        VideoInsights
+      </h1>
       {showResults ? (
         <div>
-          <h2>Results for: "{selectedQueryText}"</h2>{" "}
           {/* Display the selected query text */}
+          <button
+            onClick={() => setShowResults(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "red",
+              color: "white",
+              padding: "8px 12px",
+              border: "none",
+              borderRadius: "4px",
+            }}
+          >
+            Back to Search
+          </button>
+          <h2>Results for: "{selectedQueryText}"</h2>{" "}
           <ol className="video-results-list">
             {selectedVideos.map((video) => (
               <li key={video.id}>
@@ -150,11 +172,25 @@ function SearchPage() {
               </li>
             ))}
           </ol>
-          <button onClick={() => setShowResults(false)}>Back to Search</button>
         </div>
       ) : showBookmarks ? (
         <div>
           <h2>Bookmarks</h2> {/* Display the selected query text */}
+          <button
+            onClick={() => setShowBookmarks(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "red",
+              color: "white",
+              padding: "8px 12px",
+              border: "none",
+              borderRadius: "4px",
+            }}
+          >
+            Back to Search
+          </button>
           <ol className="video-results-list">
             {selectedVideos.map((video) => (
               <li key={video.id}>
@@ -184,6 +220,7 @@ function SearchPage() {
             onChange={handleTextChange}
             placeholder="Enter search..."
           />
+          <button onClick={() => handleViewResults(searchText)}>Search</button>
           <button onClick={() => showBookmarksView()}>Bookmarks</button>
         </div>
       )}
