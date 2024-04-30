@@ -178,6 +178,7 @@ function App() {
         </div>
       ) : (
         <div>
+          <h2>Query History</h2>
           <QueryList
             queries={queries}
             onRenameQuery={handleRenameQuery}
