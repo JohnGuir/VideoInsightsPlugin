@@ -85,6 +85,18 @@ function App() {
       }
     });
   };
+
+  const openSidePanel = () => {
+    chrome.windows.getCurrent().then((window) => {
+      if (window && window.id !== undefined) {
+        const windowId = window.id;
+        chrome.sidePanel.open({ windowId });
+      } else {
+        console.error("Failed to get the current window");
+      }
+    });
+  };
+
   const showBookmarksView = () => {
     chrome.storage.local.get({ bookmarks: [] }, (result) => {
       const bookmarks = result.bookmarks;
@@ -185,7 +197,7 @@ function App() {
             onDeleteQuery={handleDeleteQuery}
             onViewResults={(queryText) => handleViewResults(queryText)} // Pass the query text to handleViewResults
           />
-          <button onClick={() => showBookmarksView()}>Bookmarks</button>
+          <button onClick={() => openSidePanel()}>Open Side Panel</button>
         </div>
       )}
     </div>
