@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import { Query, QueryList } from "./components/QueryList";
+import { Query, QueryList } from "./QueryList";
+import "../App.css";
 import { error } from "console";
 import * as he from "he";
 
@@ -18,7 +18,7 @@ class Bookmark {
     this.currSite = currSite;
   }
 }
-function App() {
+function SearchPage() {
   // Define the state variable for storing the list of queries
   const [queries, setQueries] = useState<Query[]>([]);
   const [showResults, setShowResults] = useState(false); // State to control view
@@ -28,6 +28,7 @@ function App() {
   const [selectedQueryText, setSelectedQueryText] = useState(""); // State to store the selected query text
   //Define the state variable for bookmarks
   const [showBookmarks, setShowBookmarks] = useState(false); // State to control view
+  const [searchText, setSearchText] = useState("");
 
   // Use useEffect to load queries from local storage when the component mounts
 
@@ -41,28 +42,18 @@ function App() {
         setQueries(result.queryResult);
       }
     });
+
+    chrome.storage.local.get("search_text", (result) => {
+      if (result.search_text) {
+        setSearchText(result.search_text);
+      }
+    });
   }, []);
 
-  // Handler for editing a query
-  const handleRenameQuery = (id: number, newText: string) => {
-    // Create a new array with the updated query
-    const updatedQueries = queries.map((query) =>
-      query.id === id ? { ...query, text: newText } : query
-    );
-    // Update the state with the new array
-    setQueries(updatedQueries);
-    // Save the updated queries to local storage
-    chrome.storage.local.set({ queryResult: updatedQueries });
-  };
-
-  // Handler for deleting a query
-  const handleDeleteQuery = (id: number) => {
-    // Create a new array without the deleted query
-    const updatedQueries = queries.filter((query) => query.id !== id);
-    // Update the state with the new array
-    setQueries(updatedQueries);
-    // Save the updated queries to local storage
-    chrome.storage.local.set({ queryResult: updatedQueries });
+  const handleTextChange = (event: { target: { value: any } }) => {
+    const newValue = event.target.value;
+    setSearchText(newValue);
+    chrome.storage.local.set({ search_text: newValue });
   };
 
   // Handler for viewing the results of a query
@@ -75,28 +66,25 @@ function App() {
       queryText
     )}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
     console.log(youtubeSearchUrl);
-    chrome.windows.getCurrent().then((window) => {
-      if (window && window.id !== undefined) {
-        const windowId = window.id;
-        chrome.storage.local.set({ search_text: queryText });
-        chrome.sidePanel.open({ windowId });
-      } else {
-        console.error("Failed to get the current window");
-      }
-    });
-  };
+    var temp_videos: { id: string; title: string }[] = [];
+    fetch(youtubeSearchUrl)
+      .then((response) => response.json())
+      .then((data: any) => {
+        console.log(data);
+        // Extract video IDs and titles from the search results
+        temp_videos = data.items.map((item: any) => ({
+          id: item.id.videoId,
+          title: he.decode(item.snippet.title),
+        }));
+        console.log("Top videos:", temp_videos);
+        setSelectedVideos(temp_videos); // Set the selected videos
+      })
+      .catch((error) => {
+        console.error("Error fetching YouTube search results:", error);
+      });
 
-  const openSidePanel = () => {
-    chrome.windows.getCurrent().then((window) => {
-      if (window && window.id !== undefined) {
-        const windowId = window.id;
-        chrome.sidePanel.open({ windowId });
-      } else {
-        console.error("Failed to get the current window");
-      }
-    });
+    setShowResults(true); // Function to toggle results view
   };
-
   const showBookmarksView = () => {
     chrome.storage.local.get({ bookmarks: [] }, (result) => {
       const bookmarks = result.bookmarks;
@@ -136,11 +124,32 @@ function App() {
 
   return (
     <div className="App">
-      <h1>VideoInsights</h1>
+      <h1
+        style={{
+          marginTop: "20px",
+        }}
+      >
+        VideoInsights
+      </h1>
       {showResults ? (
         <div>
-          <h2>Results for: "{selectedQueryText}"</h2>{" "}
           {/* Display the selected query text */}
+          <button
+            onClick={() => setShowResults(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "red",
+              color: "white",
+              padding: "8px 12px",
+              border: "none",
+              borderRadius: "4px",
+            }}
+          >
+            Back to Search
+          </button>
+          <h2>Results for: "{selectedQueryText}"</h2>{" "}
           <ol className="video-results-list">
             {selectedVideos.map((video) => (
               <li key={video.id}>
@@ -163,11 +172,25 @@ function App() {
               </li>
             ))}
           </ol>
-          <button onClick={() => setShowResults(false)}>Back to Search</button>
         </div>
       ) : showBookmarks ? (
         <div>
           <h2>Bookmarks</h2> {/* Display the selected query text */}
+          <button
+            onClick={() => setShowBookmarks(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              backgroundColor: "red",
+              color: "white",
+              padding: "8px 12px",
+              border: "none",
+              borderRadius: "4px",
+            }}
+          >
+            Back to Search
+          </button>
           <ol className="video-results-list">
             {selectedVideos.map((video) => (
               <li key={video.id}>
@@ -190,18 +213,19 @@ function App() {
         </div>
       ) : (
         <div>
-          <h2>Query History</h2>
-          <QueryList
-            queries={queries}
-            onRenameQuery={handleRenameQuery}
-            onDeleteQuery={handleDeleteQuery}
-            onViewResults={(queryText) => handleViewResults(queryText)} // Pass the query text to handleViewResults
+          <h2> Enter Your Search Below</h2>
+          <input
+            type="text"
+            value={searchText}
+            onChange={handleTextChange}
+            placeholder="Enter search..."
           />
-          <button onClick={() => openSidePanel()}>Open Side Panel</button>
+          <button onClick={() => handleViewResults(searchText)}>Search</button>
+          <button onClick={() => showBookmarksView()}>Bookmarks</button>
         </div>
       )}
     </div>
   );
 }
 
-export default App;
+export default SearchPage;
