@@ -39,44 +39,57 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const keywords = topKeywords.join(' ');
 
     // Use the YouTube Data API to fetch the top video results for the processed query
-    const youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&type=video&q=${encodeURIComponent(keywords)}&key=AIzaSyAdToL-Bk7O7goraaQkXMz8bm6kyvIInmk`;
-
-    fetch(youtubeSearchUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        // Extract video IDs and titles from the search results
-        const videos = data.items.map((item) => ({
-          id: item.id.videoId,
-          title: item.snippet.title,
-        }));
-        console.log('Top videos:', videos);
 
         // Send the result to the frontend
-        const queryResult = {
+        // const queryResult = {
+        //   id: Date.now(),
+        //   text: query,
+        //   videos: videos,
+        // }
+        // chrome.storage.local.set({"queryResult":[queryResult]})
+
+        //Store the current website URL
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+      const url = tabs[0].url;
+      chrome.storage.local.get({ queries: {} }, (result) => {
+        let queries = result.queries;
+        const newQuery = {
           id: Date.now(),
           text: query,
-          videos: videos,
+        };
+        if(!(url in queries)){
+          queries[url] = []
         }
-        chrome.storage.local.set({"queryResult":[queryResult]})
-        //Store the current website URL
-        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-          let url = tabs[0].url;
-          chrome.storage.local.set({"websiteURL":url});
+        //Add query for this site, only store most recent 5
 
+        //Check if query found
+        let queryFound = false;
+        for(let i=0; i<queries[url].length;i++){
+          if(queries[url][i].text == newQuery.text){
+            queryFound = true;
+            break;
+          }
+        }
+        if(!queryFound)
+        {
+          queries[url].unshift(newQuery);
+          if(queries[url].length > 10){
+            queries[url].pop();
+          }
+        }
+        chrome.storage.local.set({ queries });
       });
-        // chrome.storage.local.get({ queries: [] }, (result) => {
-        //   const queries = result.queries;
-        //   const newQuery = {
-        //     id: Date.now(),
-        //     text: query,
-        //     videos: videos, // Save the videos with IDs and titles
-        //   };
-        //   queries.push(newQuery);
-        //   chrome.storage.local.set({ queries });
-        // });
-      })
-      .catch((error) => {
-        console.error('Error fetching YouTube search results:', error);
-      });
+
+  });
   }
 });
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  chrome.tabs.get(activeInfo.tabId, function(tab){
+      chrome.storage.local.set({"websiteURL":tab.url});
+  });
+});
+
+chrome.tabs.onUpdated.addListener((tabID, changeInfo,tab) => {
+  chrome.storage.local.set({"websiteURL":changeInfo.url});
+  
+})

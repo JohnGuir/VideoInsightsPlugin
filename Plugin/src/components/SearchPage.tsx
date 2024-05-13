@@ -5,17 +5,15 @@ import { error } from "console";
 import * as he from "he";
 
 // Define a sample query for initial state when local storage is empty
-const sample_query: Query = { id: 1, text: "Sample query", videos: [] };
+const sample_query: Query = { id: 1, text: "Sample query"};
 
 //Define the bookmark class
 class Bookmark {
   id: string;
   title: string;
-  currSite: string;
-  constructor(id: string, title: string, currSite: string) {
+  constructor(id: string, title: string) {
     this.id = id;
     this.title = title;
-    this.currSite = currSite;
   }
 }
 function SearchPage() {
@@ -77,6 +75,36 @@ function SearchPage() {
           title: he.decode(item.snippet.title),
         }));
         console.log("Top videos:", temp_videos);
+        //Update the query history
+        chrome.storage.local.get({websiteURL: ""}, (urlResult) => {
+          const url:string = urlResult.websiteURL;
+          chrome.storage.local.get({ queries: {} }, (result) => {
+            let queries = result.queries;
+            const newQuery = {
+              id: Date.now(),
+              text: queryText,
+            };
+            if(!(url in queries)){
+              queries[url] = []
+            }
+            //Check if query found
+            let queryFound = false;
+            for(let i=0; i<queries[url].length;i++){
+              if(queries[url][i].text == newQuery.text){
+                queryFound = true;
+                break;
+              }
+            }
+            if(!queryFound)
+            {
+              queries[url].unshift(newQuery);
+              if(queries[url].length > 10){
+                queries[url].pop();
+              }
+            }
+            chrome.storage.local.set({ queries });
+          });
+        });
         setSelectedVideos(temp_videos); // Set the selected videos
       })
       .catch((error) => {
@@ -88,18 +116,8 @@ function SearchPage() {
   const showBookmarksView = () => {
     chrome.storage.local.get({ bookmarks: [] }, (result) => {
       const bookmarks = result.bookmarks;
-      //Get the url of the website
-      chrome.storage.local.get({ websiteURL: "" }, (urlResult) => {
-        const url: string = urlResult.websiteURL;
-        const siteBookmarks = bookmarks
-          .filter((bookmarkEntry: Bookmark) => bookmarkEntry.currSite == url)
-          .map((bookmarkEntry: Bookmark) => ({
-            id: bookmarkEntry.id,
-            title: bookmarkEntry.title,
-          }));
-        setSelectedVideos(siteBookmarks);
-        setShowBookmarks(true);
-      });
+      setSelectedVideos(bookmarks);
+      setShowBookmarks(true);
     });
   };
   const bookmarkVideo = (id: string, title: string) => {
@@ -110,14 +128,10 @@ function SearchPage() {
         (bookmarkEntry: Bookmark) => bookmarkEntry.id == id
       );
       if (existingBookmark.length == 0) {
-        //Get the url of the website
-        chrome.storage.local.get({ websiteURL: "" }, (urlResult) => {
-          const url: string = urlResult.websiteURL;
-          const newBookmark = new Bookmark(id, title, url);
-          bookmarks.unshift(newBookmark);
-          console.log(bookmarks);
-          chrome.storage.local.set({ bookmarks });
-        });
+        const newBookmark = new Bookmark(id, title);
+        bookmarks.unshift(newBookmark);
+        // console.log(bookmarks);
+        chrome.storage.local.set({ bookmarks });
       }
     });
   };

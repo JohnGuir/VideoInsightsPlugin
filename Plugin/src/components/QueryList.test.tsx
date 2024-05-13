@@ -5,16 +5,14 @@ import { Query } from "./QueryItem";
 
 describe("QueryList", () => {
   const sampleQueries: Query[] = [
-    { id: 1, text: "First query", videos: [] },
-    { id: 2, text: "Second query", videos: [] },
+    { id: 1, text: "First query"},
+    { id: 2, text: "Second query"},
   ];
 
   it("renders a list of queries", () => {
     render(
       <QueryList
         queries={sampleQueries}
-        onRenameQuery={() => {}}
-        onDeleteQuery={() => {}}
         onViewResults={() => {}}
       />
     );
@@ -27,8 +25,6 @@ describe("QueryList", () => {
     render(
       <QueryList
         queries={sampleQueries}
-        onRenameQuery={handleRenameQuery}
-        onDeleteQuery={() => {}}
         onViewResults={() => {}}
       />
     );
@@ -51,8 +47,6 @@ describe("QueryList", () => {
     render(
       <QueryList
         queries={sampleQueries}
-        onRenameQuery={() => {}}
-        onDeleteQuery={handleDeleteQuery}
         onViewResults={() => {}}
       />
     );
@@ -62,8 +56,6 @@ describe("QueryList", () => {
     render(
       <QueryList
         queries={sampleQueries}
-        onRenameQuery={() => {}}
-        onDeleteQuery={() => {}}
         onViewResults={handleViewResults}
       />
     );
