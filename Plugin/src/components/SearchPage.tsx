@@ -34,6 +34,7 @@ function SearchPage() {
       chrome.storage.local.get("search_text", (result) => {
         if (result.search_text) {
           setSearchText(result.search_text);
+          setShowResults(false);
         }
       })
     };
