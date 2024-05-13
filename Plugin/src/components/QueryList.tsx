@@ -5,15 +5,11 @@ export type { Query } from './QueryItem';
 
 export interface QueryListProps {
   queries: Query[];
-  onRenameQuery: (id: number, newQuery: string) => void;
-  onDeleteQuery: (id: number) => void;
-  onViewResults: (queryText: string, videos: { id: string; title: string }[]) => void;
+  onViewResults: (queryText: string) => void;
 }
 
 export const QueryList: React.FC<QueryListProps> = ({
   queries,
-  onRenameQuery,
-  onDeleteQuery,
   onViewResults,
 }) => {
   return (
@@ -22,9 +18,7 @@ export const QueryList: React.FC<QueryListProps> = ({
         <QueryItem
           key={query.id}
           query={query}
-          onRename={(newQuery) => onRenameQuery(query.id, newQuery)}
-          onDelete={() => onDeleteQuery(query.id)}
-          onViewResults={() => onViewResults(query.text, query.videos)}
+          onViewResults={() => onViewResults(query.text)}
         />
       ))}
     </ul>
