@@ -18,7 +18,7 @@ class Bookmark {
 }
 function SearchPage() {
   // Define the state variable for storing the list of queries
-  const [queries, setQueries] = useState<Query[]>([]);
+  // const [queries, setQueries] = useState<Query[]>([]);
   const [showResults, setShowResults] = useState(false); // State to control view
   const [selectedVideos, setSelectedVideos] = useState<
     { id: string; title: string }[]
@@ -29,17 +29,30 @@ function SearchPage() {
   const [searchText, setSearchText] = useState("");
 
   // Use useEffect to load queries from local storage when the component mounts
+  useEffect(() => {
+    const listener = () => {
+      chrome.storage.local.get("search_text", (result) => {
+        if (result.search_text) {
+          setSearchText(result.search_text);
+        }
+      })
+    };
+    chrome.storage.onChanged.addListener(listener);
+    return () => {
+      chrome.storage.onChanged.removeListener(listener);
+    };
+  }, []);
 
   useEffect(() => {
-    chrome.storage.local.get("queryResult", (result) => {
-      if (result.queryResult === undefined) {
-        // If 'queries' key doesn't exist in local storage, set the initial state with the sample query
-        setQueries([sample_query]);
-      } else {
-        // If 'queries' key exists in local storage, set the state with the stored queries
-        setQueries(result.queryResult);
-      }
-    });
+    // chrome.storage.local.get("queryResult", (result) => {
+    //   if (result.queryResult === undefined) {
+    //     // If 'queries' key doesn't exist in local storage, set the initial state with the sample query
+    //     setQueries([sample_query]);
+    //   } else {
+    //     // If 'queries' key exists in local storage, set the state with the stored queries
+    //     setQueries(result.queryResult);
+    //   }
+    // });
 
     chrome.storage.local.get("search_text", (result) => {
       if (result.search_text) {
