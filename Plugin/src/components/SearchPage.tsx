@@ -3,13 +3,13 @@ import { Query, QueryList } from "./QueryList";
 import "../App.css";
 import { error } from "console";
 import * as he from "he";
-import Slider from "./Slider"; 
+import Slider from "./Slider";
 import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
-// import ISO6391 from 'iso-639-1';
+import ISO6391 from "iso-639-1";
 // import translate from 'translate-google';
 
 // Define a sample query for initial state when local storage is empty
-const sample_query: Query = { id: 1, text: "Sample query"};
+const sample_query: Query = { id: 1, text: "Sample query" };
 
 // const translate = require('translate-google');
 // const ISO6391 = require('iso-639-1');
@@ -19,52 +19,52 @@ const styles = {
     fontFamily: "Arial, sans-serif",
     textAlign: "center",
     marginTop: "20px",
-    backgroundColor: "#f7f7f7", 
+    backgroundColor: "#f7f7f7",
     padding: "20px",
   },
   header: {
     fontSize: "2rem",
     marginBottom: "20px",
-    backgroundColor: "#FF0000",  
-    color: "#fff", 
+    backgroundColor: "#FF0000",
+    color: "#fff",
     padding: "10px 20px",
-    borderRadius: "10px", 
+    borderRadius: "10px",
     display: "inline-block",
   },
   input: {
     padding: "10px",
     marginRight: "8px",
-    marginBottom: "8px", 
-    borderRadius: "20px", 
+    marginBottom: "8px",
+    borderRadius: "20px",
     border: "none",
     fontSize: "1rem",
   },
   button: {
-    padding: "8px 16px", 
-    borderRadius: "20px", 
+    padding: "8px 16px",
+    borderRadius: "20px",
     border: "none",
-    backgroundColor: "#27ae60", 
-    color: "#fff", 
+    backgroundColor: "#27ae60",
+    color: "#fff",
     cursor: "pointer",
     fontSize: "1rem",
   },
   label: {
     fontSize: "1rem",
     marginRight: "8px",
-    marginBottom: "100px"
+    marginBottom: "100px",
   },
   select: {
     padding: "10px",
-    marginBottom: "8px", 
-    borderRadius: "20px", 
+    marginBottom: "8px",
+    borderRadius: "20px",
     border: "none",
     fontSize: "1rem",
     marginRight: "8px",
   },
-  suggestions: { 
+  suggestions: {
     backgroundColor: "#fff",
     border: "1px solid #ccc",
-    borderRadius: "10px", 
+    borderRadius: "10px",
     marginTop: "2px",
     textAlign: "left",
     zIndex: "1",
@@ -101,7 +101,6 @@ const styles = {
   },
 };
 
-
 //Define the bookmark class
 class Bookmark {
   id: string;
@@ -122,8 +121,59 @@ function SearchPage() {
   const [showBookmarks, setShowBookmarks] = useState(false); // State to control view
   const [searchText, setSearchText] = useState("");
   const [maxDuration, setMaxDuration] = useState("any"); // State variable for maximum duration
+  const [apiKey, setApiKey] = useState(""); //State for api key
   const [sortBy, setSortBy] = useState("relevance");
-  const allLanguages = ["English", "French", "German", "Spanish", "Italian", "Russian", "Chinese", "Japanese", "Arabic", "Hindi", "Portuguese", "Korean", "Dutch", "Swedish", "Turkish", "Greek", "Polish", "Finnish", "Danish", "Norwegian", "Hungarian", "Czech", "Thai", "Indonesian", "Malay", "Vietnamese", "Tagalog", "Romanian", "Bulgarian", "Ukrainian", "Slovak", "Slovenian", "Croatian", "Serbian", "Lithuanian", "Latvian", "Estonian", "Maltese", "Icelandic", "Farsi", "Hebrew", "Urdu", "Tamil", "Telugu", "Bengali", "Gujarati", "Marathi", "Kannada", "Punjabi"];
+  const allLanguages = [
+    "English",
+    "French",
+    "German",
+    "Spanish",
+    "Italian",
+    "Russian",
+    "Chinese",
+    "Japanese",
+    "Arabic",
+    "Hindi",
+    "Portuguese",
+    "Korean",
+    "Dutch",
+    "Swedish",
+    "Turkish",
+    "Greek",
+    "Polish",
+    "Finnish",
+    "Danish",
+    "Norwegian",
+    "Hungarian",
+    "Czech",
+    "Thai",
+    "Indonesian",
+    "Malay",
+    "Vietnamese",
+    "Tagalog",
+    "Romanian",
+    "Bulgarian",
+    "Ukrainian",
+    "Slovak",
+    "Slovenian",
+    "Croatian",
+    "Serbian",
+    "Lithuanian",
+    "Latvian",
+    "Estonian",
+    "Maltese",
+    "Icelandic",
+    "Farsi",
+    "Hebrew",
+    "Urdu",
+    "Tamil",
+    "Telugu",
+    "Bengali",
+    "Gujarati",
+    "Marathi",
+    "Kannada",
+    "Punjabi",
+  ];
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [languageValue, setLanguageValue] = useState("English");
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -142,9 +192,6 @@ function SearchPage() {
     setLanguageValue(language);
   };
 
-  
-
-
   useEffect(() => {
     const listener = () => {
       chrome.storage.local.get("search_text", (result) => {
@@ -152,7 +199,7 @@ function SearchPage() {
           setSearchText(result.search_text);
           setShowResults(false);
         }
-      })
+      });
     };
     chrome.storage.onChanged.addListener(listener);
     return () => {
@@ -174,7 +221,9 @@ function SearchPage() {
     chrome.storage.local.set({ search_text: newValue });
   };
 
-  const handleMaxDurationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleMaxDurationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setMaxDuration(event.target.value);
   };
 
@@ -187,9 +236,15 @@ function SearchPage() {
 
   const handleViewResults = (queryText: string) => {
     setSelectedQueryText(queryText);
-    // const targetLanguageCode = ISO6391.getCode(selectedLanguage);
-    // let fin = queryText; 
-    let youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&type=video&relevanceLanguage=fr&videoDuration=${maxDuration}&order=${sortBy}&q=${encodeURIComponent(queryText + ' ' + selectedLanguage + ' ')}&key=AIzaSyBsZ3eg9UB-9cLRKARiqG5H9LAxTD-JIGg`
+    const targetLanguageCode = ISO6391.getCode(selectedLanguage);
+    var temp_key = apiKey;
+    if (apiKey === "") {
+      temp_key = "AIzaSyBsZ3eg9UB-9cLRKARiqG5H9LAxTD-JIGg";
+    }
+    // let fin = queryText;
+    let youtubeSearchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&type=video&relevanceLanguage=fr&videoDuration=${maxDuration}&relevanceLanguage=${targetLanguageCode}&order=${sortBy}&q=${encodeURIComponent(
+      queryText + " in " + selectedLanguage + " language"
+    )}&key=${temp_key}`;
     var temp_videos: { id: string; title: string }[] = [];
     fetch(youtubeSearchUrl)
       .then((response) => response.json())
@@ -208,7 +263,7 @@ function SearchPage() {
               text: queryText,
             };
             if (!(url in queries)) {
-              queries[url] = []
+              queries[url] = [];
             }
             let queryFound = false;
             for (let i = 0; i < queries[url].length; i++) {
@@ -257,15 +312,16 @@ function SearchPage() {
     });
   };
 
+  function handleApiInput(value: string): void {
+    setApiKey(value);
+  }
+
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>VideoInsights</h1>
       {showResults ? (
         <div>
-          <button
-            onClick={() => setShowResults(false)}
-            style={styles.button}
-          >
+          <button onClick={() => setShowResults(false)} style={styles.button}>
             Back to Search
           </button>
           <h2>Results for: "{selectedQueryText}"</h2>
@@ -294,10 +350,7 @@ function SearchPage() {
       ) : showBookmarks ? (
         <div>
           <h2>Bookmarks</h2>
-          <button
-            onClick={() => setShowBookmarks(false)}
-            style={styles.button}
-          >
+          <button onClick={() => setShowBookmarks(false)} style={styles.button}>
             Back to Search
           </button>
           <ol style={styles.resultsList}>
@@ -333,23 +386,45 @@ function SearchPage() {
           <button onClick={() => showBookmarksView()} style={styles.button}>Bookmarks</button> */}
 
           <div style={styles.inlineButtons}>
-          <button onClick={() => handleViewResults(searchText)} style={styles.button}>Search</button>
-          <button onClick={() => showBookmarksView()} style={styles.button}>Bookmarks</button>
+            <button
+              onClick={() => handleViewResults(searchText)}
+              style={styles.button}
+            >
+              Search
+            </button>
+            <button onClick={() => showBookmarksView()} style={styles.button}>
+              Bookmarks
+            </button>
           </div>
-        
 
           <div>
-          <label style={styles.label} htmlFor="languageInput">Language: </label>
-            <input id="languageInput" type="text" value={languageValue} onChange={(e) => handleLanguageInput(e.target.value)} style={styles.input} />
+            <label style={styles.label} htmlFor="languageInput">
+              Language:{" "}
+            </label>
+            <input
+              id="languageInput"
+              type="text"
+              value={languageValue}
+              onChange={(e) => handleLanguageInput(e.target.value)}
+              style={styles.input}
+            />
             <div>
               {suggestions.map((suggestion, index) => (
-                <div key={index} onClick={() => handleLanguageChange(suggestion)} style={styles.suggestionItem}>{suggestion}</div>
+                <div
+                  key={index}
+                  onClick={() => handleLanguageChange(suggestion)}
+                  style={styles.suggestionItem}
+                >
+                  {suggestion}
+                </div>
               ))}
             </div>
           </div>
 
           <div>
-            <label style={styles.label} htmlFor="maxDuration">Maximum Duration: </label>
+            <label style={styles.label} htmlFor="maxDuration">
+              Maximum Duration:{" "}
+            </label>
             <select
               id="maxDuration"
               value={maxDuration}
@@ -364,7 +439,9 @@ function SearchPage() {
           </div>
 
           <div>
-            <label htmlFor="sortBy" style={styles.label}>Sort By: </label>
+            <label htmlFor="sortBy" style={styles.label}>
+              Sort By:{" "}
+            </label>
             <select
               id="sortBy"
               value={sortBy}
@@ -376,7 +453,19 @@ function SearchPage() {
               <option value="rating">Rating</option>
             </select>
           </div>
-
+          <div>
+            <label style={styles.label} htmlFor="apiKeyInput">
+              API Key:{" "}
+            </label>
+            <input
+              id="apiKeyInput"
+              type="text"
+              value={apiKey}
+              onChange={(e) => handleApiInput(e.target.value)}
+              placeholder="(optional) input your YouTube API key"
+              style={styles.input}
+            />
+          </div>
         </div>
       )}
     </div>
