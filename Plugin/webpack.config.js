@@ -25,6 +25,16 @@ module.exports = {
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js", ".jsx"],
+        // fallback: {
+        //     fs: false, // or require.resolve("fs-extra") if you prefer using a polyfill
+        //     url: require.resolve("url/"),
+        //     http: require.resolve("stream-http"),
+        //     https: require.resolve("https-browserify"),
+        //     stream: require.resolve("stream-browserify"),
+        //     util: require.resolve("util/"),
+        //     net: false, // No polyfill needed, set to false
+        //     tls: false, // No polyfill needed, set to false
+        // },
     },
     output: {
         path: path.resolve(__dirname, "dist"),

@@ -1,5 +1,6 @@
 import keywordExtractor from 'keyword-extractor';
 
+
 // This function is called when the extension is installed or updated
 chrome.runtime.onInstalled.addListener(() => {
   // Create a context menu item

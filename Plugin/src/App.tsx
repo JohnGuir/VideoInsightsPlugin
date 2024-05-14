@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Query, QueryList } from "./components/QueryList";
 import { error } from "console";
-import * as he from "he";
+// import * as he from "he";
 
 // Define a sample query for initial state when local storage is empty
 // const sample_query: Query = { id: 1, text: "Sample query"};
@@ -11,7 +11,7 @@ function App() {
   // Define the state variable for storing the list of queries
   const [queries, setQueries] = useState<Query[]>([]);
   const [selectedQueryText, setSelectedQueryText] = useState(""); // State to store the selected query text
-
+  
   // Use useEffect to load queries from local storage when the component mounts
 
   useEffect(() => {
@@ -28,6 +28,7 @@ function App() {
       }
     });
   }, []);
+
   // Handler for viewing the results of a query
   const handleViewResults = (
     queryText: string
