@@ -25,3 +25,9 @@ Highlight text and right click to get the chrome menu. Then click "Search Videos
 
 
 
+From here you can either bookmark videos or access your page dependent search history:
+
+![Bookmark](https://github.com/JohnGuir/VideoInsightsPlugin/blob/main/images/bookmark.png)
+
+![Search History](https://github.com/JohnGuir/VideoInsightsPlugin/blob/main/images/search_history.png)
+
