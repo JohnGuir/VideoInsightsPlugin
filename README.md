@@ -21,5 +21,7 @@ Highlight text and right click to get the chrome menu. Then click "Search Videos
 
 ![Usage Demo_2](https://github.com/JohnGuir/VideoInsightsPlugin/blob/main/images/usage_p2.png)
 
+![Usage Demo_3](https://github.com/JohnGuir/VideoInsightsPlugin/blob/main/images/usage_p3.png)
+
 
 
