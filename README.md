@@ -1,5 +1,5 @@
 # VideoInsightsPlugin
-This repository contains all the code for the VideoInsights Plugin, which is the final project for CIS3500. Our group consists of John, Aditya, Jake, Zain, and Ashwin.
+Enhance your online learning experience with Video Insight, a Chrome extension designed to aid visual learners in digesting complex concepts. Simply highlight any text while browsing, right-click, and select "Search Videos" to receive a curated set of educational YouTube videos that explain and elaborate on the highlighted content.
 
 ![Extension Demo](https://github.com/JohnGuir/VideoInsightsPlugin/blob/main/images/extension_demo.png)
 
