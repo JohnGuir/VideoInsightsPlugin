@@ -32,8 +32,12 @@ From here you can either bookmark videos or access your page dependent search hi
 ![Search History](https://github.com/JohnGuir/VideoInsightsPlugin/blob/main/images/search_history.png)
 
 
+
+
+
+
 Video demonstration link: https://youtu.be/GxzKQdsbDQg
 
 
-Please report and problems in the issues section of the repository. 
+Please report any problems in the issues section of the repository. 
 
